@@ -10,7 +10,6 @@ public class PoolClient
     private static final Logger logger = LoggerFactory.getLogger(PoolClient.class);
     private ObjectPool<DemoConnection> connectionPool;
     
-    
     public void createAndSendMessage()
     {
         String message = "Some interesting event occurred!!!";
