@@ -36,21 +36,14 @@ public class ConnectionPoolImpl implements ObjectPool<DemoConnection>
     @Override
     public void returnObject(DemoConnection connection)
     {
-        try
+        if(connection.isBrokenConnection())
         {
-            if(connection.isBrokenConnection())
-            {
-                DemoConnection newConnection = new DemoConnection(generateId());
-                pool.add(newConnection);
-            }
-            else
-            {
-                pool.put(connection);
-            }
+            DemoConnection newConnection = new DemoConnection(generateId());
+            pool.add(newConnection);
         }
-        catch (InterruptedException e)
+        else
         {
-            logger.error("Failed to return connection {}", connection.getId());
+            pool.add(connection);
         }
     }
     
