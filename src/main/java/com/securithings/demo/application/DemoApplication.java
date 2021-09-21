@@ -3,7 +3,7 @@ package com.securithings.demo.application;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.securithings.demo.interfaces.ConnectionPoolImpl;
+import com.securithings.demo.models.ConnectionPoolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

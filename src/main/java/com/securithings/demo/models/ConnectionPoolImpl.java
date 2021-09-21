@@ -1,7 +1,6 @@
-package com.securithings.demo.interfaces;
+package com.securithings.demo.models;
 
-import com.securithings.demo.client.PoolClient;
-import com.securithings.demo.models.DemoConnection;
+import com.securithings.demo.interfaces.ObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Random;
