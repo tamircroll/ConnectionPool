@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 
 public class ConnectionPoolImpl implements ObjectPool<DemoConnection>
 {
-    private static final Logger logger = LoggerFactory.getLogger(PoolClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionPoolImpl.class);
     private final LinkedBlockingDeque<DemoConnection> pool = new LinkedBlockingDeque();
     
     public ConnectionPoolImpl(int poolSize)
@@ -26,13 +26,12 @@ public class ConnectionPoolImpl implements ObjectPool<DemoConnection>
     @Override
     public DemoConnection get() throws InterruptedException, TimeoutException
     {
-        DemoConnection connection = pool.poll(60, TimeUnit.SECONDS);
+        DemoConnection connection = pool.poll(1, TimeUnit.MINUTES);
         if(connection == null)
         {
             throw new TimeoutException("Thread failed to receive connection due to Timeout");
         }
-        DemoConnection newConnection = new DemoConnection(generateId());
-        return connection.isBrokenConnection() ? newConnection : connection;
+        return connection.isBrokenConnection() ? new DemoConnection(generateId()) : connection;
     }
     
     @Override

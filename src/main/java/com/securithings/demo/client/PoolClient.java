@@ -1,6 +1,5 @@
 package com.securithings.demo.client;
 
-import com.securithings.demo.interfaces.ConnectionPoolImpl;
 import com.securithings.demo.interfaces.ObjectPool;
 import com.securithings.demo.models.DemoConnection;
 import org.slf4j.Logger;
@@ -28,7 +27,7 @@ public class PoolClient
             {
                 throw new Exception("Connection returned null from the pool");
             }
-            connection.sendRequest(message);
+            connection.sendMessage(message);
         }
         catch (Exception e)
         {
