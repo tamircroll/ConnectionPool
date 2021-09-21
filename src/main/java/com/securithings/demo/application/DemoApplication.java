@@ -3,6 +3,7 @@ package com.securithings.demo.application;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.securithings.demo.interfaces.ConnectionPoolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,11 +13,12 @@ import com.securithings.demo.models.DemoConnection;
 
 public class DemoApplication {
 	private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
-	private static final int POOL_SIZE = 5;
+    private static final int POOL_SIZE = 5;
 	private static final int NUM_OF_WORKERS = 10;
 	private static final int NUM_OF_TASKS = 1000;
-	
-	public static void main(String[] args) throws InterruptedException {
+    private static final int CONNECTION_POOL_SIZE = 5;
+    
+    public static void main(String[] args) throws InterruptedException {
 		int numberOfTasks = args != null && args.length > 0 ? Integer.parseInt(args[0]): NUM_OF_TASKS;
 		int numOfWorkers = args != null && args.length > 1 ? Integer.parseInt(args[1]): NUM_OF_WORKERS;
 		logger.info("Initializing Executor service with thread pool size of: {}", numOfWorkers);
@@ -26,7 +28,7 @@ public class DemoApplication {
 		logger.info("Initializing a connection pool with pool size of: {}", connectionPoolSize);
 		
 		// TODO: initiate your pool implementation here
-		ObjectPool<DemoConnection> connectionPool = null;
+		ObjectPool<DemoConnection> connectionPool = new ConnectionPoolImpl(CONNECTION_POOL_SIZE);
 		
 		PoolClient poolClient = new PoolClient();
 		poolClient.setConnectionPool(connectionPool);
@@ -35,13 +37,7 @@ public class DemoApplication {
 		logger.info("=======================================================================");
 		logger.info("About to execute {} concurrent report event tasks", numberOfTasks);
 		for (int i = 0; i < numberOfTasks; i++) {
-			executor.execute(new Runnable() {
-				
-				@Override
-				public void run() {
-					poolClient.createAndSendMessage();
-				}
-			});
+			executor.execute(() -> poolClient.createAndSendMessage());
 		}
 		logger.info("Finished executing {} concurrent report event tasks", numberOfTasks);
 	}
